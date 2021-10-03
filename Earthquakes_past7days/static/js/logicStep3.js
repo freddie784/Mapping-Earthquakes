@@ -16,12 +16,6 @@ let baseMaps = {
     Streets : streets,
     "Satellite Streets" : satellite
 };
-
-let earthquakes = new L.layerGroup();
-
-let overlays = {
-    Earthquakes : earthquakes
-};
 //Create map object with a center and zoom level
 let map = L.map('mapid', {
     center : [39.5, -98.5],
@@ -29,7 +23,7 @@ let map = L.map('mapid', {
     layers : [streets]
 });
 
-L.control.layers(baseMaps, overlays).addTo(map);
+L.control.layers(baseMaps).addTo(map);
 
 let earthQuakeData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
@@ -85,9 +79,7 @@ d3.json(earthQuakeData).then(data => {
        onEachFeature : function(feature, layer){
            layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
        }
-    }).addTo(earthquakes);
-
-    earthquakes.addTo(map);
+    }).addTo(map);
 
 });
 
