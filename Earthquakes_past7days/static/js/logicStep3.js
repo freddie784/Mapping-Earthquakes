@@ -31,7 +31,7 @@ function styleInfo(feature){
     return {
         opacity: 1,
     fillOpacity: 1,
-    fillColor: "#ffae42",
+    fillColor: getColor(feature.properties.mag),
     color: "#000000",
     radius: getRadius(feature.properties.mag),
     stroke: true,
@@ -46,6 +46,25 @@ function getRadius(magnitude) {
     return magnitude * 4;
 }
 
+function getColor(magnitude) {
+    if (magnitude > 5) {
+        return "#ea2c2c"
+    }
+    if (magnitude > 4) {
+        return "#ea822c";
+      }
+      if (magnitude > 3) {
+        return "#ee9c00";
+      }
+      if (magnitude > 2) {
+        return "#eecc00";
+      }
+      if (magnitude > 1) {
+        return "#d4ee00";
+      }
+      return "#98ee00";
+}
+
 d3.json(earthQuakeData).then(data => {
     console.log(data);
     // Creating a GeoJson Layer with data
@@ -54,7 +73,12 @@ d3.json(earthQuakeData).then(data => {
        pointToLayer : function(feature, latlng) {
            return L.circleMarker(latlng);
        },
-       style : styleInfo
+
+       style : styleInfo,
+
+       onEachFeature : function(feature, layer){
+           layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
+       }
     }).addTo(map);
 
 });
