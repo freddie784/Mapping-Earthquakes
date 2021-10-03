@@ -27,20 +27,34 @@ L.control.layers(baseMaps).addTo(map);
 
 let earthQuakeData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
-let myStyle = {
-    color : "blue",
-    weight : 1,
-    fillColor : "yellow"
+function styleInfo(feature){
+    return {
+        opacity: 1,
+    fillOpacity: 1,
+    fillColor: "#ffae42",
+    color: "#000000",
+    radius: getRadius(),
+    stroke: true,
+    weight: 0.5
+    };
+}
+
+function getRadius(magnitude) {
+    if (magnitude === 0) {
+        return 1;
+    }
+    return magnitude * 4;
 }
 
 d3.json(earthQuakeData).then(data => {
     console.log(data);
     // Creating a GeoJson Layer with data
     L.geoJson(data, {
-        style: myStyle,
-        onEachFeature : function(feature, layer) {
-            layer.bindPopup();
-        }
+
+       pointToLayer : function(feature, latlng) {
+           return L.circleMarker(latlng);
+       },
+       style : styleInfo
     }).addTo(map);
 
 });
