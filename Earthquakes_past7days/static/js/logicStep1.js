@@ -18,14 +18,14 @@ let baseMaps = {
 };
 //Create map object with a center and zoom level
 let map = L.map('mapid', {
-    center : [43.7,-79.3],
-    zoom : 11,
+    center : [39.5, -98.5],
+    zoom : 3,
     layers : [streets]
 });
 
 L.control.layers(baseMaps).addTo(map);
 
-let torontoHoods = "https://raw.githubusercontent.com/freddie784/Mapping-Earthquakes/main/torontoNeighborhoods.json";
+let earthQuakeData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 let myStyle = {
     color : "blue",
@@ -33,13 +33,13 @@ let myStyle = {
     fillColor : "yellow"
 }
 
-d3.json(torontoHoods).then(data => {
+d3.json(earthQuakeData).then(data => {
     console.log(data);
     // Creating a GeoJson Layer with data
     L.geoJson(data, {
         style: myStyle,
         onEachFeature : function(feature, layer) {
-            layer.bindPopup("<h2> Neighborhood: " + feature.properties.AREA_NAME + "</h2>");
+            layer.bindPopup();
         }
     }).addTo(map);
 
